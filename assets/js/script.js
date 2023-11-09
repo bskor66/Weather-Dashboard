@@ -23,23 +23,23 @@ fetch(queryURL)
 			const header = $('<div class="card-header"></div>');
 			card.append(header);
 			const title = $('<h5 class="card-title"></h5>');
-			title.text("Date");
+			const date = dayjs(day.dt_txt);
+			title.text(date.format("M/DD/YYYY"));
 			header.append(title);
-			const subtitle = $(
-				'<h6 class="card-subtitle mb-2 text-body-secondary">Emoji</h6>'
-			);
+			const iconUrl = `http://openweathermap.org/img/wn/${day.weather[0].icon}.png`;
+			const subtitle = $(`<img class="badge bg-primary" src=${iconUrl}></img>`);
 			subtitle.text("icon");
 			header.append(subtitle);
 			const list = $('<ul class="list-group list-group-flush"></ul>');
 			card.append(list);
 			const temp = $('<li class="list-group-item"></li>');
-			temp.text("Temperature:");
+			temp.text(`Temperature: ${day.main.temp} °F`);
 			list.append(temp);
 			const wind = $('<li class="list-group-item"></li>');
-			wind.text("Wind:");
+			wind.text(`Wind: ${day.wind.speed} MPH`);
 			list.append(wind);
 			const humidity = $('<li class="list-group-item"></li>');
-			humidity.text("Humidity:");
+			humidity.text(`Humidity: ${day.main.humidity} %`);
 			list.append(humidity);
 			dailyDiv.append(card);
 		});

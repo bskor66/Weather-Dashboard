@@ -1,3 +1,10 @@
-const openWeatherApiKey = "8fa2bcb96236783b7eeabf119c2ca8a4";
+const openWeatherApiKey = "ed3486fa717dade80795e0620a2c18af";
 
-let queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+let city_name = "Hartford";
+let queryURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city_name}&&appid=${openWeatherApiKey}`;
+
+fetch(queryURL)
+	.then((response) => {
+		return response.json();
+	})
+	.then((data) => console.log(data));

@@ -2,20 +2,25 @@ const openWeatherApiKey = "ed3486fa717dade80795e0620a2c18af";
 
 let lat = "40";
 let lon = "50";
-let queryURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
+let queryForecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
+let queryTodayUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
 
-fetch(queryURL)
+const getIcon = (id) => {
+	return `http://openweathermap.org/img/wn/${id}.png`;
+};
+
+fetch(queryForecastURL)
 	.then((response) => {
 		return response.json();
 	})
 	.then((data) => {
 		const location = data.city.name;
 		const forecast = data.list;
+		console.log(forecast);
 		let dailyForecast = [];
 		for (i = 0; i < forecast.length; i = i + 8) {
 			dailyForecast.push(forecast[i]);
 		}
-		console.log(dailyForecast);
 
 		const dailyDiv = $("#daily-wrapper");
 		dailyForecast.forEach((day) => {
@@ -26,8 +31,8 @@ fetch(queryURL)
 			const date = dayjs(day.dt_txt);
 			title.text(date.format("M/DD/YYYY"));
 			header.append(title);
-			const iconUrl = `http://openweathermap.org/img/wn/${day.weather[0].icon}.png`;
-			const subtitle = $(`<img class="badge bg-primary" src=${iconUrl}></img>`);
+			const iconUrl = getIcon(day.weather[0].icon);
+			const subtitle = $(`<img class="bg-primary rounded-5" src=${iconUrl} />`);
 			subtitle.text("icon");
 			header.append(subtitle);
 			const list = $('<ul class="list-group list-group-flush"></ul>');
@@ -43,4 +48,19 @@ fetch(queryURL)
 			list.append(humidity);
 			dailyDiv.append(card);
 		});
+	});
+
+fetch(queryTodayUrl)
+	.then((response) => {
+		return response.json();
+	})
+	.then((data) => {
+		console.log(data);
+		$("#current-location").text(
+			`${data.name} (${dayjs().format("M/DD/YYYY")})`
+		);
+		$("#current-temp").text(`Temperature: ${data.main.temp} °F`);
+		$("#current-icon").attr("src", getIcon(data.weather[0].icon));
+		$("#current-wind").text(`Wind: ${data.wind.speed} MPH`);
+		$("#current-humidity").text(`Humidity: ${data.main.humidity} %`);
 	});

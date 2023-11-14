@@ -1,13 +1,25 @@
 const openWeatherApiKey = "ed3486fa717dade80795e0620a2c18af";
-
-let lat = "40";
-let lon = "50";
-let queryForecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
-let queryTodayUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
+const qLoc = "Hartford";
+const queryLocURL = `http://api.openweathermap.org/geo/1.0/direct?q=${qLoc}&limit=1&appid=${openWeatherApiKey}`;
 
 const getIcon = (id) => {
 	return `http://openweathermap.org/img/wn/${id}.png`;
 };
+
+fetch(queryLocURL)
+	.then((response) => {
+		return response.json();
+	})
+	.then((data) => {
+		const {lat, lon} = data[0];
+		console.log(lat);
+		console.log(lon);
+	});
+
+const lat = "40";
+const lon = "40";
+const queryForecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
+const queryTodayURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${openWeatherApiKey}`;
 
 fetch(queryForecastURL)
 	.then((response) => {
@@ -50,7 +62,7 @@ fetch(queryForecastURL)
 		});
 	});
 
-fetch(queryTodayUrl)
+fetch(queryTodayURL)
 	.then((response) => {
 		return response.json();
 	})

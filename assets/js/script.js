@@ -7,7 +7,6 @@ const getIcon = (id) => {
 
 if (searchParams.has("q")) {
 	const qLoc = searchParams.get("q");
-	console.log(qLoc);
 	const queryLocURL = `http://api.openweathermap.org/geo/1.0/direct?q=${qLoc}&limit=1&appid=${openWeatherApiKey}`;
 
 	fetch(queryLocURL)
@@ -78,3 +77,12 @@ if (searchParams.has("q")) {
 				});
 		});
 }
+
+$("#button-search").on("click", () => {
+	const searchTerm = $("#input-search").val();
+	const queryParams = {q: searchTerm};
+	const searchParams = new URLSearchParams(queryParams);
+	window.location.replace(
+		`${window.location.origin}?${searchParams.toString()}`
+	);
+});

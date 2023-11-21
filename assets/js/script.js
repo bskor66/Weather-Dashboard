@@ -5,6 +5,23 @@ const getIcon = (id) => {
 	return `http://openweathermap.org/img/wn/${id}.png`;
 };
 
+if (localStorage.getItem("recent-searches") !== null) {
+	const recentSearches = Object.values(
+		JSON.parse(localStorage.getItem("recent-searches"))
+	);
+	const listWrapper = $("#recent-searches-list");
+	recentSearches.forEach((search) => {
+		console.log(search);
+		const searchEl = $(`<a
+		href="#"
+		class="list-group-item list-group-item-action"
+		aria-current="true">
+		${search}
+	</a>`);
+		listWrapper.append(searchEl);
+	});
+}
+
 if (searchParams.has("q")) {
 	const qLoc = searchParams.get("q");
 	const queryLocURL = `http://api.openweathermap.org/geo/1.0/direct?q=${qLoc}&limit=1&appid=${openWeatherApiKey}`;
@@ -82,8 +99,15 @@ $("#button-search").on("click", () => {
 	const searchTerm = $("#input-search").val();
 	const queryParams = {q: searchTerm};
 	const searchParams = new URLSearchParams(queryParams);
-	const recentSearches = JSON.parse(localStorage.get("recent-searches"));
-	recentSearches[Object.keys(recentSearches).length + 1] = searchTerm;
+	const recentSearchesJson = localStorage.getItem("recent-searches");
+	if (recentSearchesJson === null) {
+		localStorage.setItem("recent-searches", JSON.stringify({1: searchTerm}));
+	} else {
+		const recentSearches = JSON.parse(recentSearchesJson);
+		recentSearches[Object.keys(recentSearches).length + 1] = searchTerm;
+		localStorage.setItem("recent-searches", JSON.stringify(recentSearches));
+	}
+
 	window.location.replace(
 		`${window.location.origin}?${searchParams.toString()}`
 	);

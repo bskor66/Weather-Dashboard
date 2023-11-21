@@ -82,6 +82,8 @@ $("#button-search").on("click", () => {
 	const searchTerm = $("#input-search").val();
 	const queryParams = {q: searchTerm};
 	const searchParams = new URLSearchParams(queryParams);
+	const recentSearches = JSON.parse(localStorage.get("recent-searches"));
+	recentSearches[Object.keys(recentSearches).length + 1] = searchTerm;
 	window.location.replace(
 		`${window.location.origin}?${searchParams.toString()}`
 	);

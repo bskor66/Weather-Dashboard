@@ -8,16 +8,15 @@ const getIcon = (id) => {
 if (localStorage.getItem("recent-searches") !== null) {
 	const recentSearches = Object.values(
 		JSON.parse(localStorage.getItem("recent-searches"))
-	);
+	).slice(-10);
 	const listWrapper = $("#recent-searches-list");
 	recentSearches.forEach((search) => {
-		console.log(search);
 		const searchEl = $(`<a
-		href="#"
 		class="list-group-item list-group-item-action"
 		aria-current="true">
-		${search}
 	</a>`);
+		searchEl.text(search);
+		searchEl.attr("href", `${window.location.origin}?q=${search}`);
 		listWrapper.append(searchEl);
 	});
 }
